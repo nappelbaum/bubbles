@@ -1,4 +1,4 @@
-var imgstr = [
+const imgstr = [
   "ship2.png",
   "bullet.png",
   "bubble1.png",
@@ -7,7 +7,7 @@ var imgstr = [
   "trans.png",
 ];
 let imgs = [];
-let youx = 350,
+let youx = 370,
   youy = 520;
 let buls = [];
 let bubbles = [];
@@ -21,6 +21,7 @@ let bestScore = 0;
 let time = 300;
 let isPaused = false;
 const btnStart = document.querySelector(".btnStart");
+const btnStartAgain = document.querySelector(".btnStartAgain");
 const $bestScore = document.querySelector(".score");
 const $timer = document.querySelector(".timer");
 const timerTenSec = document.querySelector(".timer10Sec");
@@ -127,7 +128,6 @@ function appearanceBubble() {
     if (!isPaused) new_bubble();
   }, 1000);
 }
-appearanceBubble();
 
 function move_bubble() {
   for (let i = 0; i < bubbles.length; i++) {
@@ -227,10 +227,21 @@ function timer() {
     move_bubble();
     draw();
   }
+
   window.requestAnimationFrame(timer);
 }
 
-window.requestAnimationFrame(timer);
+btnStart.addEventListener("click", function () {
+  window.requestAnimationFrame(timer);
+  appearanceBubble();
+  btnStart.classList.add("hidden");
+  startTimer();
+  if (isPaused) {
+    isPaused = false;
+    pausedGame[0].classList.add("hidden");
+    pausedGame[1].classList.add("hidden");
+  }
+});
 
 function ImagesInit() {
   for (let i = 0; i < imgstr.length; i++) {
@@ -259,7 +270,6 @@ function startTimer() {
     }
   }, 1000);
 }
-startTimer();
 
 ImagesInit();
 
@@ -303,7 +313,7 @@ function draw() {
     if (bestScore < score) {
       bestScore = score;
     }
-    btnStart.classList.remove("hidden");
+    btnStartAgain.classList.remove("hidden");
     $bestScore.textContent = `Best scores: ${bestScore}`;
     addScoreToLocalStorage();
   }
@@ -314,17 +324,17 @@ window.addEventListener("load", draw, true);
 function startAgain() {
   time = 300;
   startTimer();
-  youx = 350;
+  youx = 370;
   youy = 520;
   buls = [];
   bubbles = [];
   explores = [];
   lives = 3;
   score = 0;
-  btnStart.classList.add("hidden");
+  btnStartAgain.classList.add("hidden");
 }
 
-btnStart.addEventListener("click", function () {
+btnStartAgain.addEventListener("click", function () {
   setTimeout(function () {
     if (lives <= 0 || time < 0) {
       startAgain();
@@ -366,11 +376,6 @@ window.addEventListener("blur", function () {
     pausedGame[1].classList.remove("hidden");
   }
 });
-
-// window.addEventListener("focus", function () {
-//   isPaused = true;
-//   console.log("in");
-// });
 
 function addScoreToLocalStorage() {
   localStorage.setItem("ScoresStrelialka", JSON.stringify(bestScore));

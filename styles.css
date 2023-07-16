@@ -1,4 +1,5 @@
-.btnStart {
+.btnStart,
+.btnStartAgain {
   border: none;
   background-color: rgb(158, 206, 95);
   border-radius: 5px;
